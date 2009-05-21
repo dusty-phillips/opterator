@@ -158,6 +158,28 @@ Options:
   -h, --help            show this help message and exit
   -m MYOPTION, --mine=MYOPTION
                         the myoption helptext"""
+
+def test_short_option_only():
+    result = Checker()
+    @opterate
+    def main(myoption='novalue'):
+        '''A script with one optional option.
+        @param myoption store -m the myoption helptext'''
+        result.myoption = myoption
+
+    main(['-m', 'avalue'])
+    assert result.myoption == 'avalue'
+
+def test_long_option_only():
+    result = Checker()
+    @opterate
+    def main(myoption='novalue'):
+        '''A script with one optional option.
+        @param myoption store --mine the myoption helptext'''
+        result.myoption = myoption
+
+    main(['--mine', 'avalue'])
+    assert result.myoption == 'avalue'
     
 def test_keyword_option_is_optional():
     result = Checker()
