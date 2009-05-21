@@ -42,7 +42,7 @@ def opterate(func):
     parameters = []
     if func.func_doc:
         parameters = func.func_doc.split('@param')
-        usage_text = parameters.pop(0)
+        usage_text = parameters.pop(0).strip()
 
     usage = "%prog [options]"
     if positional_params:
