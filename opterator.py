@@ -54,18 +54,14 @@ def opterate(func):
     option_names = []
     parser = OptionParser(usage)
     for param in parameters:
+        option_strings = []
         param_args = param.split()
         variable_name = param_args.pop(0)
         option_names.append(variable_name)
         action = param_args.pop(0)
         long_name = short_name = None
-        #FIXME: Tired! This is way uglier than it needs be.
-        if param_args[0].startswith('--'):
-            long_name = param_args.pop(0)
-        if param_args[0].startswith('-'):
-            short_name = param_args.pop(0)
-        if param_args[0].startswith('--'):
-            long_name = param_args.pop(0)
+        while param_args[0].startswith('-'):
+            option_strings.append(param_args.pop(0))
         help_text = ' '.join(param_args)
 
         if variable_name not in kw_params:
@@ -77,8 +73,8 @@ def opterate(func):
         if variable_name in kw_params:
             default = defaults[kw_params.index(variable_name)]
 
-        parser.add_option(short_name, long_name, action=action,
-                default=default, help=help_text, dest=variable_name)
+        parser.add_option(action=action, default=default, help=help_text,
+                dest=variable_name, *option_strings)
 
     def wrapper(argv=None):
         options, positional = parser.parse_args(argv)
