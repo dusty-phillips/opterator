@@ -8,12 +8,11 @@ def opterate(func):
     arguments, keyword arguments, and docstring.
     
     All keyword arguments in the function definition are options. Positional
-    arguments are mandatory arguments.  Options are further defined in the
-    docstring, while mandatory arguments are not. Varargs become a variable
-    length (zero allowed) list of positional arguments.  Vvarkwargs are
-    currently not supported/translated.
+    arguments are mandatory arguments.  Varargs become a variable length (zero
+    allowed) list of positional arguments. Varkwargs are currently not
+    supported/translated.
 
-    options are further defined in the docstring. The top part of the docstring
+    Options are further defined in the docstring. The top part of the docstring
     becomes the usage message for the app. Below that, @param lines in the
     following format describe the option:
 
@@ -25,10 +24,9 @@ def opterate(func):
     @param name action [short option and/or long option] help text
 
     Variable_name is the name of the variable in the function specification and
-    must refer to a keyword argument. All options must have a @param line like
-    this. All keyword arguments are options and require the @param line.
-    If you can have an arbitrary length of positional arguments, add a *arglist
-    variable.
+    must refer to a keyword argument. All options must have an @param line like
+    this. If you can have an arbitrary length of positional arguments, add a
+    *arglist variable; It can be named with any valid python identifier.
 
     See opterator_test.py for some examples.'''
     argnames, varargs, varkw, defaults = inspect.getargspec(func)
