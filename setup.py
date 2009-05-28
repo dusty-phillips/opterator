@@ -12,6 +12,7 @@ setup(
         license = "MIT",
         keywords = "opterator option parse parser options",
         url = "http://github.com/buchuki/opterator/",
+        description = "Easy option parsing introspected from function signature.",
         long_description = """At heart, a decorator for a script's main
 entry point that uses a function function signature and docstring to
 pseudo-automatically create an option parser. When invoked, the option parser
