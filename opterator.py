@@ -22,6 +22,8 @@ from optparse import OptionParser
 import inspect
 import sys
 
+__version__ = "0.1"
+
 def opterate(func):
     '''A decorator for a main function entry point to a script. It tries to
     automatically generate the options for the main entry point based on the
