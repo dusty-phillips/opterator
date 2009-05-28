@@ -152,7 +152,6 @@ def test_keyword_option_helptext():
     assert out.strip() == """Usage: py.test [options]
 
 A script with one optional option.
-        
 
 Options:
   -h, --help            show this help message and exit
@@ -291,6 +290,7 @@ def test_comprehensive_example():
     capture = py.io.StdCapture()
     py.test.raises(SystemExit, main, ['-h'])
     out, error = capture.reset()
+    print out
 
     assert error == ''
     assert out.strip() == '''Usage: py.test [options] filename1 filename2 [other_filenames]
@@ -298,8 +298,6 @@ def test_comprehensive_example():
 An example copy script with some example parameters borrowed from
         the cp man page. Illustrates some of the simplicity and pitfalls of
         this option parsing method.
-        
-        
 
 Options:
   -h, --help            show this help message and exit
