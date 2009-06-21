@@ -132,7 +132,7 @@ def test_keyword_option():
     @opterate
     def main(myoption='novalue'):
         '''A script with one optional option.
-        @param myoption store -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
 
     main(['-m', 'avalue'])
@@ -143,7 +143,7 @@ def test_keyword_option_helptext():
     @opterate
     def main(myoption='novalue'):
         '''A script with one optional option.
-        @param myoption store -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
     py.test.raises(SystemExit, main, ['-h'])
     out, error = capture.reset()
@@ -163,7 +163,7 @@ def test_short_option_only():
     @opterate
     def main(myoption='novalue'):
         '''A script with one optional option.
-        @param myoption store -m the myoption helptext'''
+        @param myoption -m the myoption helptext'''
         result.myoption = myoption
 
     main(['-m', 'avalue'])
@@ -174,7 +174,7 @@ def test_long_option_only():
     @opterate
     def main(myoption='novalue'):
         '''A script with one optional option.
-        @param myoption store --mine the myoption helptext'''
+        @param myoption --mine the myoption helptext'''
         result.myoption = myoption
 
     main(['--mine', 'avalue'])
@@ -185,7 +185,7 @@ def test_keyword_option_is_optional():
     @opterate
     def main(myoption='novalue'):
         '''A script with one optional option.
-        @param myoption store -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
 
     main([])
@@ -196,7 +196,7 @@ def test_keyword_list_option():
     @opterate
     def main(myoption=[]):
         '''A script with one optional option that can be repeated.
-        @param myoption append -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
 
     main(['-m', 'hi'])
@@ -207,7 +207,7 @@ def test_keyword_list_multiple_options():
     @opterate
     def main(myoption=[]):
         '''A script with one optional option that can be repeated.
-        @param myoption append -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
 
     main(['-m', 'hi', '-m', 'yo'])
@@ -218,7 +218,7 @@ def test_keyword_list_no_options():
     @opterate
     def main(myoption=[]):
         '''A script with one optional option that can be repeated.
-        @param myoption append -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
 
     main([])
@@ -229,7 +229,7 @@ def test_required_arg_kw_option():
     @opterate
     def main(firstarg, myoption='novalue'):
         '''A script with one required argument and one optional value.
-        @param myoption store -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
         result.firstarg = firstarg
 
@@ -242,7 +242,7 @@ def test_required_arg_kw_option_is_optional():
     @opterate
     def main(firstarg, myoption='novalue'):
         '''A script with one required argument and one optional value.
-        @param myoption store -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
         result.firstarg = firstarg
 
@@ -255,7 +255,7 @@ def test_varargs_kw_option():
     @opterate
     def main(myoption='novalue', *someargs):
         '''A script with one required argument and one optional value.
-        @param myoption store -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
         result.someargs = someargs
 
@@ -268,7 +268,7 @@ def test_varargs_kw_option_is_optional():
     @opterate
     def main(myoption='novalue', *someargs):
         '''A script with one required argument and one optional value.
-        @param myoption store -m --mine the myoption helptext'''
+        @param myoption -m --mine the myoption helptext'''
         result.myoption = myoption
         result.someargs = someargs
 
@@ -281,8 +281,8 @@ def test_two_kw_options():
     @opterate
     def main(myoption='novalue', secondoption=False):
         '''A script with one required argument and one optional value.
-        @param myoption store -m --mine the myoption helptext
-        @param secondoption store_true -s --second the second helptext'''
+        @param myoption -m --mine the myoption helptext
+        @param secondoption -s --second the second helptext'''
         result.myoption = myoption
         result.secondoption = secondoption
 
@@ -299,11 +299,11 @@ def test_comprehensive_example():
         the cp man page. Illustrates some of the simplicity and pitfalls of
         this option parsing method.
         
-        @param recursive store_true -r --recursive copy directories
+        @param recursive -r --recursive copy directories
             recursively
-        @param interactive store_true -i --interactive prompt before
+        @param interactive -i --interactive prompt before
             overwrite
-        @param suffix store -S --suffix override the usual backup
+        @param suffix -S --suffix override the usual backup
             suffix '''
         # When two filenames are required and others optional you have to build
         # funny lists like this.

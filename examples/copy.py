@@ -5,10 +5,10 @@ def main(filename1, filename2, recursive=False, backup=False,
     '''An example copy script with some example parameters that might
     be used in a copy command.
     
-    @param recursive store_true -r --recursive copy directories
+    @param recursive -r --recursive copy directories
         recursively
-    @param backup store_true -b --backup backup any files you copy over
-    @param suffix store -S --suffix override the usual backup
+    @param backup -b --backup backup any files you copy over
+    @param suffix -S --suffix override the usual backup
         suffix '''
     filenames = [filename1, filename2] + list(other_filenames)
     destination = filenames.pop()

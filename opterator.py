@@ -34,16 +34,24 @@ def opterate(func):
     allowed) list of positional arguments. Varkwargs are currently not
     supported/translated.
 
+    The default value assigned to a keyword argument helps determine the type
+    of option and action. The defalut value is assigned directly to the option
+    parser's default for that option. In addition, it determines the
+    OptionParser action -- a default value of False implies store_true, while
+    True implies store_false. If the default value is a list, the action is
+    append (multiple instances of that option are permitted). Strings or None
+    imply a store action.
+
     Options are further defined in the docstring. The top part of the docstring
     becomes the usage message for the app. Below that, @param lines in the
     following format describe the option:
 
-    @param variable_name store_true -v --verbose the help_text for the variable
-    @param variable_name store -v the help_text no long option
-    @param variable_name store_false -verbose the help_text no short option
+    @param variable_name -v --verbose the help_text for the variable
+    @param variable_name -v the help_text no long option
+    @param variable_name --verbose the help_text no short option
 
     the format is:
-    @param name action [short option and/or long option] help text
+    @param name [short option and/or long option] help text
 
     Variable_name is the name of the variable in the function specification and
     must refer to a keyword argument. All options must have an @param line like
@@ -80,7 +88,6 @@ def opterate(func):
         param_args = param.split()
         variable_name = param_args.pop(0)
         option_names.append(variable_name)
-        action = param_args.pop(0)
         long_name = short_name = None
         while param_args[0].startswith('-'):
             option_strings.append(param_args.pop(0))
@@ -94,6 +101,15 @@ def opterate(func):
         default = None
         if variable_name in kw_params:
             default = defaults[kw_params.index(variable_name)]
+
+        if default == False:
+            action = 'store_true'
+        elif default == True:
+            action = 'store_false'
+        elif type(default) in (list, tuple):
+            action = 'append'
+        else:
+            action = 'store'
 
         parser.add_option(action=action, default=default, help=help_text,
                 dest=variable_name, *option_strings)

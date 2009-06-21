@@ -33,8 +33,8 @@ The equivalent code using opterator looks like this:
 >>> @opterate
 ... def main(source, dest, backup=False, interactive=False):
 ...     '''A script for renaming files
-...     @param backup store_true -b --backup backup the file
-...     @param interactive store_true -i --interactive interatively
+...     @param backup -b --backup backup the file
+...     @param interactive -i --interactive interatively
 ...     move files...     '''
 ...     # Move the file
 ...  
@@ -51,10 +51,10 @@ def main(filename1, filename2, recursive=False, backup=False,
     '''An example copy script with some example parameters that might
     be used in a copy command.
     
-    @param recursive store_true -r --recursive copy directories
+    @param recursive -r --recursive copy directories
         recursively
-    @param backup store_true -b --backup backup any files you copy over
-    @param suffix store -S --suffix override the usual backup
+    @param backup -b --backup backup any files you copy over
+    @param suffix -S --suffix override the usual backup
         suffix '''
     pass
 
