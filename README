@@ -33,8 +33,8 @@ The equivalent code using opterator looks like this:
 >>> @opterate
 ... def main(source, dest, backup=False, interactive=False):
 ...     '''A script for renaming files
-...     @param backup -b --backup store_true backup the file
-...     @param interactive -i --interactive store_true interatively
+...     @param backup store_true -b --backup backup the file
+...     @param interactive store_true -i --interactive interatively
 ...     move files...     '''
 ...     # Move the file
 ...  
