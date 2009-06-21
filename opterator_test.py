@@ -191,6 +191,39 @@ def test_keyword_option_is_optional():
     main([])
     assert result.myoption == 'novalue'
 
+def test_keyword_list_option():
+    result = Checker()
+    @opterate
+    def main(myoption=[]):
+        '''A script with one optional option that can be repeated.
+        @param myoption append -m --mine the myoption helptext'''
+        result.myoption = myoption
+
+    main(['-m', 'hi'])
+    assert result.myoption == ['hi']
+
+def test_keyword_list_multiple_options():
+    result = Checker()
+    @opterate
+    def main(myoption=[]):
+        '''A script with one optional option that can be repeated.
+        @param myoption append -m --mine the myoption helptext'''
+        result.myoption = myoption
+
+    main(['-m', 'hi', '-m', 'yo'])
+    assert result.myoption == ['hi', 'yo']
+
+def test_keyword_list_no_options():
+    result = Checker()
+    @opterate
+    def main(myoption=[]):
+        '''A script with one optional option that can be repeated.
+        @param myoption append -m --mine the myoption helptext'''
+        result.myoption = myoption
+
+    main([])
+    assert result.myoption == []
+
 def test_required_arg_kw_option():
     result = Checker()
     @opterate
