@@ -11,7 +11,7 @@ setup(
         keywords="opterator option parse parser options",
         url="http://github.com/buchuki/opterator/",
         description="Easy option parsing introspected from function signature.",
-        download_url="https://github.com/buchuki/opterator/archive/0.3.tar.gz",
+        download_url="https://github.com/buchuki/opterator/archive/%s.tar.gz" % opterator.__version__,
         classifiers=[
             'Development Status :: 4 - Beta',
             'Intended Audience :: Developers',
