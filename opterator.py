@@ -70,8 +70,8 @@ def opterate(func):
 
     usage_text = ''
     parameters = []
-    if func.func_doc:
-        parameters = func.func_doc.split('@param')
+    if func.__doc__:
+        parameters = func.__doc__.split('@param')
         usage_text = parameters.pop(0).strip()
 
     usage = "%prog [options]"
