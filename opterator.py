@@ -21,7 +21,7 @@
 from optparse import OptionParser
 import inspect
 
-__version__ = "0.3"
+__version__ = "0.3.1"
 
 
 def opterate(func):
