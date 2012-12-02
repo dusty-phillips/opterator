@@ -43,18 +43,18 @@ def opterate(func):
     imply a store action.
 
     Options are further defined in the docstring. The top part of the docstring
-    becomes the usage message for the app. Below that, @param lines in the
+    becomes the usage message for the app. Below that, :param: lines in the
     following format describe the option:
 
-    @param variable_name -v --verbose the help_text for the variable
-    @param variable_name -v the help_text no long option
-    @param variable_name --verbose the help_text no short option
+    :param variable_name: -v --verbose the help_text for the variable
+    :param variable_name: -v the help_text no long option
+    :param variable_name: --verbose the help_text no short option
 
     the format is:
-    @param name [short option and/or long option] help text
+    :param name: [short option and/or long option] help text
 
     Variable_name is the name of the variable in the function specification and
-    must refer to a keyword argument. All options must have an @param line like
+    must refer to a keyword argument. All options must have a :param: line like
     this. If you can have an arbitrary length of positional arguments, add a
     *arglist variable; It can be named with any valid python identifier.
 
@@ -71,7 +71,7 @@ def opterate(func):
     usage_text = ''
     parameters = []
     if func.__doc__:
-        parameters = func.__doc__.split('@param')
+        parameters = func.__doc__.split(':param')
         usage_text = parameters.pop(0).strip()
 
     usage = "%prog [options]"
@@ -86,15 +86,15 @@ def opterate(func):
     for param in parameters:
         option_strings = []
         param_args = param.split()
-        variable_name = param_args.pop(0)
+        variable_name = param_args.pop(0)[:-1]
         option_names.append(variable_name)
         while param_args[0].startswith('-'):
             option_strings.append(param_args.pop(0))
         help_text = ' '.join(param_args)
 
         if variable_name not in kw_params:
-            raise ValueError('%s is not a valid @param name.'
-                    '@params must match keyword argumentnames in the'
+            raise ValueError('%s is not a valid :param: name.'
+                    ':params: must match keyword argumentnames in the'
                     'function signature.' % variable_name)
 
         default = None
