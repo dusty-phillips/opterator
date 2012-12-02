@@ -4,7 +4,7 @@ import opterator
 setup(
         name="opterator",
         version=opterator.__version__,
-        py_modules=['opterator'],
+        py_modules=['opterator', 'test_opterator'],
         author="Dusty Phillips",
         author_email="dusty@buchuki.com",
         license="MIT",
