@@ -253,6 +253,37 @@ Options:
                         the myoption helptext"""
 
 
+def test_keyword_option_no_identifier_docstring():
+    result = Checker()
+
+    @opterate
+    def main(myoption="novalue"):
+        '''A script with one optional option, but no parameter in docstring.'''
+        result.myoption = myoption
+    main(['--myoption', 'avalue'])
+    assert result.myoption == 'avalue'
+
+
+def test_keyword_option_no_identifier_docstring_helptext():
+    capture = py.io.StdCapture()
+
+    @opterate
+    def main(myoption='novalue'):
+        '''A script with one optional option, but no parameter in docstring.'''
+        print("never called")
+    py.test.raises(SystemExit, main, ['-h'])
+    out, error = capture.reset()
+    assert error == ''
+    print(out.strip())
+    assert out.strip() == """Usage: py.test [options]
+
+A script with one optional option, but no parameter in docstring.
+
+Options:
+  -h, --help            show this help message and exit
+  -m MYOPTION, --myoption=MYOPTION"""
+
+
 def test_keyword_list_option():
     result = Checker()
 

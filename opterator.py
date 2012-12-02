@@ -69,10 +69,15 @@ def opterate(func):
         kw_params = []
 
     usage_text = ''
-    parameters = []
+    parameters = {}
     if func.__doc__:
-        parameters = func.__doc__.split(':param')
-        usage_text = parameters.pop(0).strip()
+        param_doc = func.__doc__.split(':param')
+        usage_text = param_doc.pop(0).strip()
+        parameters = {}
+        for param in param_doc:
+            param_args = param.split()
+            variable_name = param_args.pop(0)[:-1]
+            parameters[variable_name] = param_args
 
     usage = "%prog [options]"
     if positional_params:
@@ -83,15 +88,14 @@ def opterate(func):
 
     option_names = []
     parser = OptionParser(usage)
-    for param in parameters:
+    for variable_name in kw_params:
         option_strings = []
-        param_args = param.split()
-        variable_name = param_args.pop(0)[:-1]
+        param_args = parameters.get(variable_name, [])
         option_names.append(variable_name)
-        if not param_args[0].startswith('-'):
+        if not param_args or not param_args[0].startswith('-'):
             option_strings.append('--' + variable_name)
             option_strings.append('-' + variable_name[0])
-        while param_args[0].startswith('-'):
+        while param_args and param_args[0].startswith('-'):
             option_strings.append(param_args.pop(0))
         help_text = ' '.join(param_args)
 
