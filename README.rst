@@ -87,4 +87,3 @@ Your help text will look like this::
     -S SUFFIX, --suffix=SUFFIX
                           override the usual backup suffix
 
-The short and long form of the options are 
