@@ -1,4 +1,4 @@
-# Copyright (c) 2009 Dusty Phillips <dusty@linux.ca>
+# Copyright (c) 2009, 2012 Dusty Phillips <dusty@linux.ca>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
