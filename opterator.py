@@ -20,15 +20,15 @@
 
 from optparse import OptionParser
 import inspect
-import sys
 
-__version__ = "0.1"
+__version__ = "0.2"
+
 
 def opterate(func):
     '''A decorator for a main function entry point to a script. It tries to
     automatically generate the options for the main entry point based on the
     arguments, keyword arguments, and docstring.
-    
+
     All keyword arguments in the function definition are options. Positional
     arguments are mandatory arguments.  Varargs become a variable length (zero
     allowed) list of positional arguments. Varkwargs are currently not
@@ -62,8 +62,8 @@ def opterate(func):
     argnames, varargs, varkw, defaults = inspect.getargspec(func)
 
     if defaults:
-        positional_params = argnames[:-1*len(defaults)]
-        kw_params = argnames[-1*len(defaults):]
+        positional_params = argnames[:-1 * len(defaults)]
+        kw_params = argnames[-1 * len(defaults):]
     else:
         positional_params = argnames
         kw_params = []
@@ -88,7 +88,6 @@ def opterate(func):
         param_args = param.split()
         variable_name = param_args.pop(0)
         option_names.append(variable_name)
-        long_name = short_name = None
         while param_args[0].startswith('-'):
             option_strings.append(param_args.pop(0))
         help_text = ' '.join(param_args)
