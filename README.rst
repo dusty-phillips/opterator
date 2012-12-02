@@ -11,7 +11,9 @@ scripts, but it's really useful for quick and dirty ones where you can't decide
 if you want to bother with optparse, but querying sys.argv manually is a bit
 too complicated.
 
-For example, an optparse program for renaming a file might look like this::
+For example, an optparse program for renaming a file might look like this:
+
+.. code-block:: python
 
   from optparse import OptionParser
   def main():
@@ -28,7 +30,9 @@ For example, an optparse program for renaming a file might look like this::
       main()
 
 
-The equivalent code using opterator looks like this::
+The equivalent code using opterator looks like this:
+
+.. code-block:: python
 
   from opterator import opterate
   @opterate
@@ -43,7 +47,9 @@ The equivalent code using opterator looks like this::
       main()
 
 Opterator automatically generates help messages from the docstring. If your
-main function looks like this::
+main function looks like this:
+
+.. code-block:: python
 
   @opterate
   def main(filename1, filename2, recursive=False, backup=False,
