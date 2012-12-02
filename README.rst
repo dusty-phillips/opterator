@@ -22,7 +22,7 @@ For example, an optparse program for renaming a file might look like this:
       parser = OptionParser(usage="A script for renaming files")
       parser.add_option('-b', '--backup', action=store_true,
           help='backup the file')
-      parser.add_option('-i', '--interactive', action=store_true,
+      parser.add_option('-p', '--interactive', action=store_true,
           help='interactively move files')
       # Move the file
       
@@ -38,15 +38,23 @@ The equivalent code using opterator looks like this:
   @opterate
   def main(source, dest, backup=False, interactive=False):
       '''A script for renaming files
-      :param backup: -b --backup backup the file
-      :param interactive: -i --interactive interatively
+      :param backup: backup the file
+      :param interactive: -p --interactive interatively
       move files...     '''
       # Move the file
    
   if __name__ == '__main__':
       main()
 
-Opterator automatically generates help messages from the docstring. If your
+Opterator automatically generates help messages from the docstring. The main part
+of the docstring becomes the main part of the help string. The individual 
+parameter docstrings become the helptext for the arguments. By default, the
+long and short form of a given parameter come from the parameter name and the
+first character of the parameter name. You can replace either or both of these
+by adding options that begin with a ``-`` character between the parameter and
+the helptext.
+
+If your
 main function looks like this:
 
 .. code-block:: python
@@ -57,10 +65,10 @@ main function looks like this:
       '''An example copy script with some example parameters that might
       be used in a copy command.
       
-      @param recursive -r --recursive copy directories
+      :param recursive: copy directories
           recursively
-      @param backup -b --backup backup any files you copy over
-      @param suffix -S --suffix override the usual backup
+      :param backup: -b --backup backup any files you copy over
+      :param suffix: -S --suffix override the usual backup
           suffix '''
       pass
 
@@ -78,3 +86,5 @@ Your help text will look like this::
     -b, --backup          backup any files you copy over
     -S SUFFIX, --suffix=SUFFIX
                           override the usual backup suffix
+
+The short and long form of the options are 

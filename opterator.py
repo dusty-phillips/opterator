@@ -88,6 +88,9 @@ def opterate(func):
         param_args = param.split()
         variable_name = param_args.pop(0)[:-1]
         option_names.append(variable_name)
+        if not param_args[0].startswith('-'):
+            option_strings.append('--' + variable_name)
+            option_strings.append('-' + variable_name[0])
         while param_args[0].startswith('-'):
             option_strings.append(param_args.pop(0))
         help_text = ' '.join(param_args)

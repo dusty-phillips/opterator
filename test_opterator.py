@@ -220,6 +220,39 @@ def test_keyword_option_is_optional():
     assert result.myoption == 'novalue'
 
 
+def test_keyword_option_no_identifier():
+    result = Checker()
+
+    @opterate
+    def main(myoption="novalue"):
+        '''A script with one optional option.
+        :param myoption: the myoption helptext'''
+        result.myoption = myoption
+    main(['--myoption', 'avalue'])
+    assert result.myoption == 'avalue'
+
+
+def test_keyword_option_no_identifier_helptext():
+    capture = py.io.StdCapture()
+
+    @opterate
+    def main(myoption='novalue'):
+        '''A script with one optional option.
+        :param myoption: the myoption helptext'''
+        print("never called")
+    py.test.raises(SystemExit, main, ['-h'])
+    out, error = capture.reset()
+    assert error == ''
+    assert out.strip() == """Usage: py.test [options]
+
+A script with one optional option.
+
+Options:
+  -h, --help            show this help message and exit
+  -m MYOPTION, --myoption=MYOPTION
+                        the myoption helptext"""
+
+
 def test_keyword_list_option():
     result = Checker()
 
