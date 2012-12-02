@@ -6,7 +6,7 @@ setup(
         version=opterator.__version__,
         py_modules=['opterator'],
         author="Dusty Phillips",
-        author_email="dusty@linux.ca",
+        author_email="dusty@buchuki.com",
         license="MIT",
         keywords="opterator option parse parser options",
         url="http://github.com/buchuki/opterator/",
