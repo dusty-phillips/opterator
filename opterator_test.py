@@ -147,7 +147,7 @@ def test_keyword_option_helptext():
         result.myoption = myoption
     py.test.raises(SystemExit, main, ['-h'])
     out, error = capture.reset()
-    print out
+    print(out)
     assert error == ''
     assert out.strip() == """Usage: py.test [options]
 
@@ -323,7 +323,7 @@ def test_comprehensive_example():
     capture = py.io.StdCapture()
     py.test.raises(SystemExit, main, ['-h'])
     out, error = capture.reset()
-    print out
+    print(out)
 
     assert error == ''
     assert out.strip() == '''Usage: py.test [options] filename1 filename2 [other_filenames]
