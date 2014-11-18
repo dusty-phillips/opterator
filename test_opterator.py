@@ -153,8 +153,12 @@ def test_not_enough_positional():
                    ['sourcename'])
     out, error = capture.reset()
     assert out == ''
-    assert error.strip() == """usage: py.test [-h] source dest
-py.test: error: too few arguments"""
+    assert error.strip() in (  # python2, python 3 versions of argparse
+        """usage: py.test [-h] source dest
+py.test: error: too few arguments""",
+        """usage: py.test [-h] source dest
+py.test: error: the following arguments are required: dest"""
+    )
 
 
 def test_positional_help_text():
