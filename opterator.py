@@ -18,33 +18,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from optparse import OptionParser
+
+from argparse import ArgumentParser
 import inspect
 
 __version__ = "0.5"
 
 
 def opterate(func):
-    '''A decorator for a main function entry point to a script. It tries to
-    automatically generate the options for the main entry point based on the
+    '''A decorator for a main function entry point to a script. It
+    automatically generates the options for the main entry point based on the
     arguments, keyword arguments, and docstring.
 
     All keyword arguments in the function definition are options. Positional
-    arguments are mandatory arguments.  Varargs become a variable length (zero
-    allowed) list of positional arguments. Varkwargs are currently not
-    supported/translated.
+    arguments are mandatory arguments that store a string value.  Varargs
+    become a variable length (zero allowed) list of positional arguments.
+    Varkwargs are currently ignored.
 
     The default value assigned to a keyword argument helps determine the type
-    of option and action. The defalut value is assigned directly to the option
+    of option and action. The defalut value is assigned directly to the
     parser's default for that option. In addition, it determines the
-    OptionParser action -- a default value of False implies store_true, while
+    ArgumentParser action -- a default value of False implies store_true, while
     True implies store_false. If the default value is a list, the action is
     append (multiple instances of that option are permitted). Strings or None
     imply a store action.
 
     Options are further defined in the docstring. The top part of the docstring
-    becomes the usage message for the app. Below that, :param: lines in the
-    following format describe the option:
+    becomes the usage message for the app. Below that, ReST-style :param: lines
+    in the following format describe the option:
 
     :param variable_name: -v --verbose the help_text for the variable
     :param variable_name: -v the help_text no long option
@@ -58,89 +59,60 @@ def opterate(func):
     this. If you can have an arbitrary length of positional arguments, add a
     *arglist variable; It can be named with any valid python identifier.
 
-    See opterator_test.py for some examples.'''
+    See opterator_test.py and examples/ for some examples.'''
     argnames, varargs, varkw, defaults = inspect.getargspec(func)
 
-    if defaults:
-        positional_params = argnames[:-1 * len(defaults)]
-        kw_params = argnames[-1 * len(defaults):]
-    else:
-        positional_params = argnames
-        kw_params = []
+    kw_boundary = len(argnames) - len(defaults) if defaults else len(argnames)
+    positional_params = argnames[:kw_boundary]
+    kw_params = argnames[kw_boundary:]
 
-    usage_text = ''
-    parameters = {}
+    description = ''
+    param_docs = {}
     if func.__doc__:
         param_doc = func.__doc__.split(':param')
-        usage_text = param_doc.pop(0).strip()
-        parameters = {}
+        description = param_doc.pop(0).strip()
         for param in param_doc:
             param_args = param.split()
             variable_name = param_args.pop(0)[:-1]
-            parameters[variable_name] = param_args
+            param_docs[variable_name] = param_args
 
-    usage = "%prog [options]"
-    if positional_params:
-        usage += " " + " ".join(positional_params)
-    if varargs:
-        usage += " [%s]" % varargs
-    usage += "\n\n%s" % usage_text
+    parser = ArgumentParser(description=description)
 
-    option_names = []
-    parser = OptionParser(usage)
-    for variable_name in kw_params:
-        option_strings = []
-        param_args = parameters.get(variable_name, [])
-        option_names.append(variable_name)
-        if not param_args or not param_args[0].startswith('-'):
-            option_strings.append('--' + variable_name)
-            option_strings.append('-' + variable_name[0])
-        while param_args and param_args[0].startswith('-'):
-            option_strings.append(param_args.pop(0))
-        help_text = ' '.join(param_args)
+    for param in positional_params:
+        parser.add_argument(param, help=" ".join(param_docs.get(param, [])))
+    for param in kw_params:
+        default = defaults[kw_params.index(param)]
+        names = []
+        if param in param_docs:
+            param_doc = param_docs.get(param, [])
+            while param_doc and param_doc[0].startswith('-'):
+                names.append(param_doc.pop(0))
+        names = names if names else ['-'+param[0], '--' + param]
 
-        if variable_name not in kw_params:
-            raise ValueError('%s is not a valid :param: name.'
-                    ':params: must match keyword argumentnames in the'
-                    'function signature.' % variable_name)
-
-        default = None
-        if variable_name in kw_params:
-            default = defaults[kw_params.index(variable_name)]
-
-        if default == False:
-            action = 'store_true'
-        elif default == True:
-            action = 'store_false'
+        option_kwargs = {
+            'action': 'store',
+            'help': ' '.join(param_doc),
+            'dest': param,
+            'default': default
+        }
+        if default is False:
+            option_kwargs['action'] = 'store_true'
+        elif default is True:
+            option_kwargs['action'] = 'store_false'
         elif type(default) in (list, tuple):
-            action = 'append'
-        else:
-            action = 'store'
+            if default:
+                option_kwargs['choices'] = default
+            else:
+                option_kwargs['action'] = 'append'
 
-        parser.add_option(action=action, default=default, help=help_text,
-                dest=variable_name, *option_strings)
+        parser.add_argument(*names, **option_kwargs)
+    if varargs:
+        parser.add_argument(varargs, nargs='*')
 
     def wrapper(argv=None):
-        options, positional = parser.parse_args(argv)
-        processed_args = []
-
-        for arg_name in argnames:
-            if arg_name in option_names:
-                option_value = getattr(options, arg_name)
-                if not option_value and arg_name not in kw_params:
-                    parser.error('%s is required.' % arg_name)
-
-                processed_args.append(option_value)
-            else:
-                if positional:
-                    processed_args.append(positional.pop(0))
-                else:
-                    parser.error('Not enough arguments.')
-
-        processed_args += positional
-
-        if len(processed_args) > len(argnames) and not varargs:
-            parser.error('Too many arguments.')
-
+        args = vars(parser.parse_args(argv))
+        processed_args = [args[p] for p in argnames]
+        if varargs:
+            processed_args.extend(args[varargs])
         func(*processed_args)
     return wrapper
