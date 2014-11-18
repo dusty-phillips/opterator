@@ -1,4 +1,4 @@
-# Copyright (c) 2009, 2012 Dusty Phillips <dusty@linux.ca>
+# Copyright (c) 2009, 2012, 2014 Dusty Phillips <dusty@buchuki.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
 from optparse import OptionParser
 import inspect
 
-__version__ = "0.4"
+__version__ = "0.5"
 
 
 def opterate(func):
