@@ -487,6 +487,51 @@ def test_two_kw_options():
     assert result.secondoption is True
 
 
+def test_two_kw_options_same_first_letter():
+    result = Checker()
+
+    @opterate
+    def main(myoption=False, mysecondoption=False):
+        '''A script with two optional values.
+        :param myoption: the myoption helptext
+        :param secondoption: the second helptext'''
+        result.myoption = myoption
+        result.mysecondoption = mysecondoption
+
+    main(['-m', '-y'])
+    assert result.myoption is True
+    assert result.mysecondoption is True
+
+
+def test_kw_options_no_letters_left():
+    result = Checker()
+
+    @opterate
+    def main(m_opt=False, y_opt=False, my=False):
+        '''A script with three optional values, no short option left for last
+        value.
+        :param m_opt: the m_opt helptext
+        :param y_opt: the y_opt helptext
+        :param my: the my helptext'''
+        result.m_opt = m_opt
+        result.y_opt = y_opt
+        result.my = my
+    capture = py.io.StdCapture()
+    py.test.raises(SystemExit, main, ['-h'])
+    out, error = capture.reset()
+    assert error == ''
+    print(out)
+    assert out.strip() == '''usage: py.test [-h] [-m] [-y] [--my]
+
+A script with three optional values, no short option left for last value.
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -m, --m_opt  the m_opt helptext
+  -y, --y_opt  the y_opt helptext
+  --my         the my helptext'''
+
+
 def test_comprehensive_example():
     result = Checker()
 

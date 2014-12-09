@@ -25,6 +25,29 @@ import inspect
 __version__ = "0.5"
 
 
+def generate_options():
+    '''Helper coroutine to identify short options that haven't been used
+    yet. Yields lists of short option (if available) and long option for
+    the given name, keeping track of which short options have been previously
+    used.
+
+    If you aren't familiar with coroutines, use similar to a generator:
+    x = generate_options()
+    next(x)  # advance coroutine past its initialization code
+    params = x.send(param_name)
+    '''
+    used_short_options = set()
+    param_name = yield
+    while True:
+        names = ['--' + param_name]
+        for letter in param_name:
+            if letter not in used_short_options:
+                used_short_options.add(letter)
+                names.insert(0, '-' + letter)
+                break
+        param_name = yield names
+
+
 def opterate(func):
     '''A decorator for a main function entry point to a script. It
     automatically generates the options for the main entry point based on the
@@ -77,6 +100,8 @@ def opterate(func):
             param_docs[variable_name] = param_args
 
     parser = ArgumentParser(description=description)
+    option_generator = generate_options()
+    next(option_generator)
 
     for param in positional_params:
         parser.add_argument(param, help=" ".join(param_docs.get(param, [])))
@@ -88,7 +113,8 @@ def opterate(func):
             param_doc = param_docs.get(param, [])
             while param_doc and param_doc[0].startswith('-'):
                 names.append(param_doc.pop(0))
-        names = names if names else ['-' + param[0], '--' + param]
+
+        names = names if names else option_generator.send(param)
 
         option_kwargs = {
             'action': 'store',
