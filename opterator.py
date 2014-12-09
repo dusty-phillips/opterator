@@ -83,11 +83,12 @@ def opterate(func):
     for param in kw_params:
         default = defaults[kw_params.index(param)]
         names = []
+        param_doc = []
         if param in param_docs:
             param_doc = param_docs.get(param, [])
             while param_doc and param_doc[0].startswith('-'):
                 names.append(param_doc.pop(0))
-        names = names if names else ['-'+param[0], '--' + param]
+        names = names if names else ['-' + param[0], '--' + param]
 
         option_kwargs = {
             'action': 'store',
