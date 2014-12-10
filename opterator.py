@@ -21,6 +21,7 @@
 
 from argparse import ArgumentParser
 import inspect
+import sys
 
 __version__ = "0.5"
 
@@ -46,6 +47,35 @@ def generate_options():
                 names.insert(0, '-' + letter)
                 break
         param_name = yield names
+
+
+def portable_argspec(func):
+    '''
+    Given a function, return a tuple of
+    (positional_params, keyword_params, varargs, defaults, annotations)
+    where
+    * positional_params is a list of parameters that don't have default values
+    * keyword_params is a list of parameters that have default values
+    * varargs is the string name for variable arguments
+    * defaults is a dict of default values for the keyword parameters
+    * annotations is a dictionary of param_name: annotation pairs
+        it may be empty, and on python 2 will always be empty.
+
+    This function is portable between Python 2 and Python 3, and does some
+    extra processing of the output from inspect.
+    '''
+    if sys.version_info < (3, 0):  # PYTHON 2 MUST DIE
+        argnames, varargs, varkw, defaults = inspect.getargspec(func)
+        annotations = {}
+    else:
+        (
+            argnames, varargs, varkw, defaults, kwa, kwd, annotations
+        ) = inspect.getfullargspec(func)
+
+    kw_boundary = len(argnames) - len(defaults) if defaults else len(argnames)
+    positional_params = argnames[:kw_boundary]
+    kw_params = argnames[kw_boundary:]
+    return positional_params, kw_params, varargs, defaults, annotations
 
 
 def opterate(func):
@@ -83,11 +113,9 @@ def opterate(func):
     *arglist variable; It can be named with any valid python identifier.
 
     See opterator_test.py and examples/ for some examples.'''
-    argnames, varargs, varkw, defaults = inspect.getargspec(func)
-
-    kw_boundary = len(argnames) - len(defaults) if defaults else len(argnames)
-    positional_params = argnames[:kw_boundary]
-    kw_params = argnames[kw_boundary:]
+    (
+        positional_params, kw_params, varargs, defaults, annotations
+    ) = portable_argspec(func)
 
     description = ''
     param_docs = {}
@@ -109,6 +137,8 @@ def opterate(func):
         default = defaults[kw_params.index(param)]
         names = []
         param_doc = []
+        if param in annotations:
+            names = annotations[param]
         if param in param_docs:
             param_doc = param_docs.get(param, [])
             while param_doc and param_doc[0].startswith('-'):
@@ -138,7 +168,7 @@ def opterate(func):
 
     def wrapper(argv=None):
         args = vars(parser.parse_args(argv))
-        processed_args = [args[p] for p in argnames]
+        processed_args = [args[p] for p in positional_params + kw_params]
         if varargs:
             processed_args.extend(args[varargs])
         func(*processed_args)
