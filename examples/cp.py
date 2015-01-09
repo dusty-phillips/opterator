@@ -3,9 +3,9 @@ from opterator import opterate
 
 @opterate
 def main(filename1, filename2, recursive=False, backup=False,
-        suffix='~', *other_filenames):
+         suffix='~', *other_filenames):
     '''An example copy script with some example parameters that might
-    be used in a copy command.
+    be used in a file or directory copy command.
 
     :param recursive: -r --recursive copy directories
         recursively

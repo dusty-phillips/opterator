@@ -1,6 +1,6 @@
 '''So you want a quick and dirty command line app without screwing around
-with optparse or getopt, but also without a complicated if-else on the length
-of sys.argv. You don't really need a comprehensive help file, cause it's just
+with argparse or getopt, but also without a complicated if-else on the length
+of sys.argv. You don't really need a comprehensive help file, because it's just
 you running the script and knowing what options are available is enough.
 How many boilerplate lines of code is it gonna take?'''
 
@@ -30,7 +30,7 @@ or even so:
   $ python examples/basic.py --color=purple another_file --verbose
   another_file purple True
 
-And you get a not too useless helpfile:
+And you get a not too useless help description:
 
   $ python examples/basic.py -h
   Usage: basic.py [options] filename
