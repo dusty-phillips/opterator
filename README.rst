@@ -96,11 +96,11 @@ So, if your main function looks like this:
 
 Your help text will look like this::
 
-.. code-block:: sh
+.. code-block:: none
 
   dusty:opterator $ python cp.py -h
   usage: cp.py [-h] [-r] [-b] [-S SUFFIX]
-               filename1 filename2 [other_filenames [other_filenames ...]]
+  filename1 filename2 [other_filenames [other_filenames ...]]
 
   An example copy script with some example parameters that might be used in a
   file or directory copy command.
